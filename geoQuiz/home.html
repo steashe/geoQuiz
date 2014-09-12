@@ -2,8 +2,30 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>geoQuiz</title>
+    <link type="text/css" rel="stylesheet" href="style.css" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="general.js"></script>
+    <script type="text/javascript" src="gameController.js"></script>
 </head>
 <body>
+    <div id="container">
+        <button id="newGame">New Game</button>
+        <img class="visibile" id="life1" src="life.png" alt="heart" />
+        <img class="visibile" id="life2" src="life.png" alt="heart" />
+        <img class="visibile" id="life3" src="life.png" alt="heart" />
 
+
+
+        <div id="country">
+            <p>Name of Country here</p>
+        </div>
+
+        <div id="options">
+            <button id="test" value="0">wrong option</button><br />
+            <button id="test2" value="1">correct option</button>
+        </div>
+        
+        <p id="score">Score: 0</p>
+    </div>
 </body>
 </html>

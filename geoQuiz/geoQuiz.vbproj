@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="gameController.js" />
+    <Content Include="general.js" />
     <Content Include="home.html" />
     <Content Include="style.css" />
     <Content Include="Web.config" />

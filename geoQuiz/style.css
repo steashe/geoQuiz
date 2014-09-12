@@ -1,1 +1,10 @@
-﻿
+﻿*           { margin:0; padding:0; }
+
+img         { float:right; visibility:hidden; margin:10px 10px 0 0; }
+
+#container  { width:320px; height:480px; background-color:orange; }
+#options    { margin-top:100px; width:100%; }
+#options button   { display:block; margin:0 auto; }
+#score           { display:inline; float:right; margin-left:10px; visibility:hidden; font-size:18px; position:absolute; bottom:10px;}
+#newGame    { margin:10px 0 0 10px; background-color:yellow; }
+
