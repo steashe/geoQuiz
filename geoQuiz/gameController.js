@@ -51,9 +51,11 @@ gameController = {
 
     loadNextData: function () {
         //site to load JSON data from
-        $.getJSON('https://raw.githubusercontent.com/mledoze/countries/master/countries.json',
-        function (result) {
-            alert(result);
+        $.getJSON("https://raw.githubusercontent.com/mledoze/countries/master/countries.json",
+            function (result) {
+                $.each(result, function (i, field) {
+                    $("#json").append(field + " ");
+            });
         });
         //import data from JSON file and place into html
     },
