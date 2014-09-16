@@ -5,11 +5,13 @@ gameController = {
         playerLives: 3,
         /// <field name="playerScore" type="Number">Player score</field>
         playerScore: 0,
+
+        gameType: ''
     },
 
     Data: {
         allCountries: [],
-        allCapitals: []
+        allAnswers: []
     },
 
     init: function () {
@@ -18,7 +20,11 @@ gameController = {
 
     setup: function () {
         $('#newGame').click(function () {
-            gameController.newGame();           
+            gameController.newGame('capital');
+        });
+
+        $('#newGame2').click(function () {
+            gameController.newGame('callCode');
         });
     },
 
@@ -40,7 +46,7 @@ gameController = {
             this.reset();
             $('#newGame').css('visibility', 'visible');
             this.Data.allCountries = [];
-            this.Data.allCapitals = [];
+            this.Data.allAnswers = [];
             $('#score').html('');
         } else {
             this.loadNextCountry();
@@ -69,11 +75,20 @@ gameController = {
                     var longitude = json.countries[x].latlng[1];
                     var region = json.countries[x].region;
                     var subRegion = json.countries[x].subregion;
+                    var callCode = json.countries[x].callingCode;
 
-                    if (capital != '') {
-                        var nation = new Country(name, capital, latitude, longitude, region, subRegion);
-                        gameController.Data.allCountries.push(nation);
-                        gameController.Data.allCapitals.push(capital);
+                    if (gameController.ScoreSheet.gameType === 'capital') {
+                        if (capital != '') {
+                            var nation = new Country(name, capital, latitude, longitude, region, subRegion, callCode);
+                            gameController.Data.allCountries.push(nation);
+                            gameController.Data.allAnswers.push(capital);
+                        }
+                    } else {//delete or find something better and remove all references of callCode and gametype
+                        if (callCode != '') {
+                            var nation = new Country(name, capital, latitude, longitude, region, subRegion, callCode);
+                            gameController.Data.allCountries.push(nation);
+                            gameController.Data.allAnswers.push(callCode);
+                        }
                     }
                 }
             },
@@ -86,36 +101,36 @@ gameController = {
 
     loadNextCountry: function () {
         var answer = Math.floor(Math.random() * (this.Data.allCountries.length));
-        var random = Math.floor(Math.random() * (this.Data.allCapitals.length));
-        var random2 = Math.floor(Math.random() * (this.Data.allCapitals.length));
-
+        var random = Math.floor(Math.random() * (this.Data.allAnswers.length));
+        var random2 = Math.floor(Math.random() * (this.Data.allAnswers.length));
+        //can still get 2 the same
         if (random === random2) {
-            alert('in here');
-            random2 = Math.floor(Math.random() * (this.Data.allCapitals.length));
+            random2 = Math.floor(Math.random() * (this.Data.allAnswers.length));
         }
 
         if (answer === random) {
-            random = Math.floor(Math.random() * (this.Data.allCapitals.length));
+            random = Math.floor(Math.random() * (this.Data.allAnswers.length));
         }
 
         if (answer === random2) {
-            random2 = Math.floor(Math.random() * (this.Data.allCapitals.length));
+            random2 = Math.floor(Math.random() * (this.Data.allAnswers.length));
         }
 
         $('#country').append(this.Data.allCountries[answer].name);
 
-        $('#options').append('<button id = "answer">' + this.Data.allCountries[answer].capital + '</button>' +
-                             '<button class = "option">' + this.Data.allCapitals[random] + '</button>' +
-                             '<button class = "option">' + this.Data.allCapitals[random2] + '</button>');
+        if (this.ScoreSheet.gameType === 'capital') {
+            $('#options').append('<button id = "answer">' + this.Data.allCountries[answer].capital + '</button>');
+        } else {
+            $('#options').append('<button id = "answer">' + this.Data.allCountries[answer].callCode + '</button>');
+        }
 
-
+        $('#options').append('<button class = "option">' + this.Data.allAnswers[random] + '</button>' +
+                             '<button class = "option">' + this.Data.allAnswers[random2] + '</button>');
 
         var options = document.getElementById('options');
         for (var i = options.children.length; i >= 0; i--) {
             options.appendChild(options.children[Math.random() * i | 0]);
         }
-
-
 
         $('.option').click(function () {
             gameController.checkUserChoice(false);
@@ -140,9 +155,10 @@ gameController = {
         $('#options').html('');
     },
 
-    newGame: function () {
+    newGame: function (gameType) {
         this.ScoreSheet.playerLives = 3;
         this.ScoreSheet.playerScore = 0;
+        this.ScoreSheet.gameType = gameType;
 
         $('#score').html('Score: 0');
         $('#newGame').css('visibility', 'hidden');
