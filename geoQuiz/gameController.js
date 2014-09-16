@@ -8,12 +8,12 @@ gameController = {
     },
 
     Data: {
-        allCountries:[]
+        allCountries: [],
+        allCapitals: []
     },
 
     init: function () {
         this.setup();
-        this.loadData();
     },
 
     setup: function () {
@@ -29,19 +29,21 @@ gameController = {
             this.reset();
             this.loadNextCountry();
         } else {
+            this.reset();
             this.loseLife();
-        }
-
-        
+        }         
     },
 
     checkGameOver: function () {
-        if (this.ScoreSheet.playerLives === 0) {
+        if (this.ScoreSheet.playerLives === 0 || this.Data.allCountries.length === 0) {
             alert('Game Over. You scored ' + this.ScoreSheet.playerScore + ' points.');
             this.reset();
             $('#newGame').css('visibility', 'visible');
-            
+            this.Data.allCountries = [];
+            this.Data.allCapitals = [];
             $('#score').html('');
+        } else {
+            this.loadNextCountry();
         }
     },
 
@@ -67,9 +69,11 @@ gameController = {
                     var region = json.countries[x].region;
                     var subRegion = json.countries[x].subregion;
 
-                    var nation = new Country(name, capital, latitude, longitude, region, subRegion);
-
-                    gameController.Data.allCountries.push(nation);          
+                    if (capital != '') {
+                        var nation = new Country(name, capital, latitude, longitude, region, subRegion);
+                        gameController.Data.allCountries.push(nation);
+                        gameController.Data.allCapitals.push(capital);
+                    }
                 }
             },
 
@@ -80,15 +84,36 @@ gameController = {
     },
 
     loadNextCountry: function () {
-        var actual = Math.floor(Math.random() * (this.Data.allCountries.length));
-        /*var random = Math.floor(Math.random() * (this.Data.allCountries.length + 1));
-        var random2 = Math.floor(Math.random() * (this.Data.allCountries.length + 1));*/
+        var answer = Math.floor(Math.random() * (this.Data.allCountries.length));
+        var random = Math.floor(Math.random() * (this.Data.allCapitals.length));
+        var random2 = Math.floor(Math.random() * (this.Data.allCapitals.length));
 
-        $('#country').append(this.Data.allCountries[actual].name);
+        if (random === random2) {
+            random2 = Math.floor(Math.random() * (this.Data.allCapitals.length));
+        }
 
-        $('#options').append('<button id = "answer">' + this.Data.allCountries[actual].capital + '</button>' +
-                             '<button class = "option">' + this.Data.allCountries[0].capital + '</button>' +
-                             '<button class = "option">' + this.Data.allCountries[1].capital + '</button>');
+        if (answer === random) {
+            random = Math.floor(Math.random() * (this.Data.allCapitals.length));
+        }
+
+        if (answer === random2) {
+            random2 = Math.floor(Math.random() * (this.Data.allCapitals.length));
+        }
+
+        $('#country').append(this.Data.allCountries[answer].name);
+
+        $('#options').append('<button id = "answer">' + this.Data.allCountries[answer].capital + '</button>' +
+                             '<button class = "option">' + this.Data.allCapitals[random] + '</button>' +
+                             '<button class = "option">' + this.Data.allCapitals[random2] + '</button>');
+
+
+
+        var options = document.getElementById('options');
+        for (var i = options.children.length; i >= 0; i--) {
+            options.appendChild(options.children[Math.random() * i | 0]);
+        }
+
+
 
         $('.option').click(function () {
             gameController.checkUserChoice(false);
@@ -96,8 +121,10 @@ gameController = {
 
         $('#answer').click(function () {
             gameController.checkUserChoice(true);
-        })
+        });
 
+        //cut the chosen one out
+        this.Data.allCountries.splice(answer, 1);
     },
 
     loseLife: function () {
