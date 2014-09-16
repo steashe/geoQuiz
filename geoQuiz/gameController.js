@@ -57,6 +57,7 @@ gameController = {
         $.ajax({
             type: "get",
             dataType: "text",
+            async: false,
             url: "countries2.json",
 
             success: function (result) {
@@ -89,6 +90,7 @@ gameController = {
         var random2 = Math.floor(Math.random() * (this.Data.allCapitals.length));
 
         if (random === random2) {
+            alert('in here');
             random2 = Math.floor(Math.random() * (this.Data.allCapitals.length));
         }
 
@@ -141,7 +143,6 @@ gameController = {
     newGame: function () {
         this.ScoreSheet.playerLives = 3;
         this.ScoreSheet.playerScore = 0;
-        this.reset();
 
         $('#score').html('Score: 0');
         $('#newGame').css('visibility', 'hidden');
