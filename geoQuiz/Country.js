@@ -1,4 +1,4 @@
-﻿//class Player 
+﻿//class Player
 
 // Properties //
 Country.prototype.name = '';
