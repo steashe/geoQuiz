@@ -11,7 +11,7 @@ gameController = {
         //stores all country objects
         allCountries: [],
         //stores all possible answers
-        allAnswers: []
+        allAnswers: [],
     },
 
     init: function () {
@@ -73,6 +73,7 @@ gameController = {
             success: function (result) {
                 //creating JavaScript object of the json data
                 var json = JSON.parse(result);
+
                 for (var x = 0; x < json.countries.length; x++) {
                     var name = json.countries[x].name.common;
                     var capital = json.countries[x].capital;
@@ -104,23 +105,14 @@ gameController = {
 
 
 
-
         //can still get 2 the same
         if (random === random2) {
             random2 = Math.floor(Math.random() * (this.Data.allAnswers.length));
         }
 
-        if (answer === random) {
-            random = Math.floor(Math.random() * (this.Data.allAnswers.length));
+        if (answer === random || answer === random2) {
+            answer = Math.floor(Math.random() * (this.Data.allCountries.length));
         }
-
-        if (answer === random2) {
-            random2 = Math.floor(Math.random() * (this.Data.allAnswers.length));
-        } 
-
-
-
-
 
 
         $('#country').append(this.Data.allCountries[answer].name);

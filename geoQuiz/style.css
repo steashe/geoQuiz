@@ -1,15 +1,58 @@
-﻿/*General*/
+﻿/*iPhone 6*/
+
+/*General*/
 *           { margin:0; padding:0; }
 
-#newGame    { height:100px; width:100px; border-radius:5px; position:relative; top:190px; left:110px; background-color:blue; color:white; }
-#container  { width:320px; height:480px; background-color:green; position:relative; }
+#newGame    { height:224px; width:224px; border-radius:5px; position:relative; top:555px; left:263px; background-color:blue; color:white; font-size:40px; }
+#container  { width:750px; height:1334px; background-color:green; position:relative; }
 
 /*In game section*/
-img             { float:right; visibility:hidden; margin:10px 10px 0 0; }
+img             { width:110px; height:110px; float:right; visibility:hidden; margin:10px 10px 0 0; }
 
-#options        { margin-top:30px; width:100%; }
-#options button { display:block; margin:10px auto; height:60px; width:200px; border-radius:5px; background-color:blue; color:white; font-size:20px; }
-#score          { display:inline; float:right; margin-left:10px; position:absolute; bottom:10px; font-size:18px; color:white; }
-#country        { text-align:center; width:200px; position:relative; margin:10px 0 0 60px; font-size:30px; color:white; }
+#options        { margin-top:60px; width:100%; }
+#options button { display:block; margin:30px auto; height:150px; width:420px; border-radius:5px; background-color:blue; color:white; font-size:40px; }
+#score          { display:inline; float:right; margin-left:10px; position:absolute; bottom:10px; font-size:36px; color:white; }
+#country        { text-align:center; width:420px; position:relative; margin:20px 0 0 165px; font-size:60px; color:white; }
 
-/*media queries*/
+
+/*iPhone 5*/
+@media screen and (max-width:640px) {
+    /*General*/
+    #newGame    { height:200px; width:200px; top:468px; left:220px; }
+    #container  { width:640px; height:1136px; }
+
+    /*In game section*/
+    img             { width:100px; height:100px; }
+
+    #options        { margin-top:40px; }
+    #options button { margin:20px auto; height:120px; width:400px; }
+    #country        { width:400px; margin:20px 0 0 120px; }
+}
+
+
+/*iPhone 4*/
+@media screen and (max-height:960px) {
+    /*General*/
+    #newGame    { top:380px;}
+    #container  { height:960px; }
+
+    /*In game section*/
+    #options        { margin-top:30px; }
+    #country        { margin:10px 0 0 120px; }
+}
+
+
+/*iPhone 3*/
+@media screen and (max-width:320px) {
+    /*General*/
+    #newGame    { height:100px; width:100px; top:190px; left:110px; font-size:20px; }
+    #container  { width:320px; height:480px;  }
+
+    /*In game section*/
+    img             { width:50px; height:50px; }
+
+    #options        { margin-top:15px; width:100%; }
+    #options button { height:60px; width:200px; font-size:20px; margin:10px auto; }
+    #score          { font-size:18px; }
+    #country        { width:200px; margin:10px 0 0 60px; font-size:30px; }
+}
