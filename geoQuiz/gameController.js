@@ -116,7 +116,7 @@ gameController = {
 
         if (answer === random2) {
             random2 = Math.floor(Math.random() * (this.Data.allAnswers.length));
-        }
+        } 
 
 
 
