@@ -74,6 +74,8 @@ gameController = {
 
     loadNextCountry: function () {
         /// <summary>load the next country</summary>
+
+        this.reset();
         //variable for amount of answers
         var numberOfWrongAnswers = 2;
         
@@ -103,8 +105,12 @@ gameController = {
         }
 
         $('#country').html(answerName);
-        $('#options').html('<button id = "answer">' + answerCapital + '</button>');
-        
+
+        var answerOptions = [];
+
+        var a1 = '<button id = "answer">' + answerCapital + '</button>';
+        answerOptions.push(a1);
+
         //select the amount of wrong answers
         var d = 0;
         while (d < numberOfWrongAnswers) {
@@ -112,16 +118,17 @@ gameController = {
             var randomCapital = copyOfAnswers[random];
             //remove them also so no duplicates
             copyOfAnswers.splice(random, 1);
-
-            $('#options').append('<button class = "option">' + randomCapital + '</button>');
+            //add to the array of answers
+            var a = '<button class = "option">' + randomCapital + '</button>'
+            answerOptions.push(a);
             d++;
         }
 
-        //shuffle answer buttons
-        //try to make more clear
-        var options = document.getElementById('options');
-        for (var i = options.children.length; i >= 0; i--) {
-            options.appendChild(options.children[Math.random() * i | 0]);
+        //shuffle the array of answers
+        this.shuffle(answerOptions);
+        
+        for (var n = 0; n < answerOptions.length ; n++){
+            $('#options').append(answerOptions[n]);
         }
 
         //add event handlers to the newly created buttons
@@ -134,6 +141,20 @@ gameController = {
         });
 
         
+    },
+
+    shuffle: function (array) {
+        /// <summary>shuffle the array of answers</summary>
+        /// <param name="array" type="Array">the array to be shuffled</param>
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+
+            //make the swap
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
     },
 
     checkUserChoice: function (correct) {
@@ -172,6 +193,7 @@ gameController = {
     gameOver: function () {
         alert('Game Over. You scored ' + this.ScoreSheet.playerScore + ' points.');
         this.reset();
+        $('#country').html('Game Over');
         $('#newGame').css('visibility', 'visible');
 
         //empty arrays
