@@ -42,7 +42,7 @@ gameController = {
         $('#hint').css('visibility', 'visible');
         $('#score').html('Score: 0');
         $('#newGame').css('visibility', 'hidden');
-        $('img').css('visibility', 'visible');
+        $('img').css('visibility', 'visible').fadeIn(100);
         this.loadData();
         this.loadNextCountry();
     },
@@ -86,6 +86,9 @@ gameController = {
         /// <summary>load the next country</summary>
 
         this.reset();
+        $('#country').fadeIn(800);
+        $('#options').fadeIn(800);
+        $('#response').fadeIn(800);
         //variable for amount of answers
         var numberOfWrongAnswers = 2;
         
@@ -114,8 +117,6 @@ gameController = {
             c++;
         }
 
-        $('#country').html(answerName);
-
         var answerOptions = [];
 
         var a1 = '<button id = "answer">' + answerCapital + '</button>';
@@ -137,17 +138,29 @@ gameController = {
         //shuffle the array of answers
         this.shuffle(answerOptions);
         
+        //add data to html
+        $('#country').html(answerName);
+
         for (var n = 0; n < answerOptions.length ; n++){
             $('#options').append(answerOptions[n]);
         }
 
         //add event handlers to the newly created buttons
         $('.option').click(function () {
-            gameController.checkUserChoice(false);
+            $(this).css('background-color', 'red');
+            $('#response').html('Incorrect!');
+            setTimeout(function () {
+                gameController.checkUserChoice(false);
+            }, 800);
+                    
         });
 
         $('#answer').click(function () {
-            gameController.checkUserChoice(true);
+            $(this).css('background-color', '#0F0');
+            $('#response').html('Correct!');
+            setTimeout(function () {
+                gameController.checkUserChoice(true);   
+            }, 800);
         });
 
         
@@ -172,26 +185,41 @@ gameController = {
         /// <param name="correct" type="Boolean">correct boolean</param>
         if (correct) {
             this.increaseScore();
-            this.loadNextCountry();
+            $('#country').fadeOut(800);
+            $('#options').fadeOut(800);
+            $('#response').fadeOut(800);
+
+            setTimeout(function () {
+                gameController.loadNextCountry();
+            }, 800);
+            
         } else {
             this.loseLife();
             if (this.checkGameOver()) {
                 this.gameOver();
             }else{
-                this.loadNextCountry();
+                $('#country').fadeOut(800);
+                $('#options').fadeOut(800);
+                $('#response').fadeOut(800);
+
+                setTimeout(function () {
+                    gameController.loadNextCountry();
+                }, 800);
             }
         }         
     },
 
     increaseScore: function () {
         /// <summary>increase the users score by one</summary>
+        $('#score').fadeOut(800);
         this.ScoreSheet.playerScore++;
-        $('#score').html('Score: ' + this.ScoreSheet.playerScore);
+        $('#score').html('Score: ' + this.ScoreSheet.playerScore).fadeIn(800);
+
     },
 
     loseLife: function () {
         /// <summary>the player loses a life</summary>
-        $('#life' + this.ScoreSheet.playerLives).css('visibility', 'hidden');
+        $('#life' + this.ScoreSheet.playerLives).fadeOut(800);
         this.ScoreSheet.playerLives--;  
     },
 
@@ -202,9 +230,8 @@ gameController = {
 
     gameOver: function () {
         /// <summary>player has run out of lives</summary>
-        alert('Game Over. You scored ' + this.ScoreSheet.playerScore + ' points.');
         this.reset();
-        $('#country').html('Game Over');
+        $('#country').html('Game Over! You scored ' + this.ScoreSheet.playerScore + ' points.');
         $('#hint').css('visibility', 'hidden');
         $('#newGame').css('visibility', 'visible');
 
@@ -219,6 +246,7 @@ gameController = {
         /// <summary>reset the html in specific IDs</summary>
         $('#country').html('');
         $('#options').html('');
+        $('#response').html('');
     },
 
     giveHint: function () {
