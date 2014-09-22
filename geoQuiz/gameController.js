@@ -86,9 +86,6 @@ gameController = {
         /// <summary>load the next country</summary>
 
         this.reset();
-        $('#country').fadeIn(800);
-        $('#options').fadeIn(800);
-        $('#response').fadeIn(800);
         //variable for amount of answers
         var numberOfWrongAnswers = 2;
         
@@ -185,10 +182,6 @@ gameController = {
         /// <param name="correct" type="Boolean">correct boolean</param>
         if (correct) {
             this.increaseScore();
-            $('#country').fadeOut(800);
-            $('#options').fadeOut(800);
-            $('#response').fadeOut(800);
-
             setTimeout(function () {
                 gameController.loadNextCountry();
             }, 800);
@@ -198,10 +191,6 @@ gameController = {
             if (this.checkGameOver()) {
                 this.gameOver();
             }else{
-                $('#country').fadeOut(800);
-                $('#options').fadeOut(800);
-                $('#response').fadeOut(800);
-
                 setTimeout(function () {
                     gameController.loadNextCountry();
                 }, 800);
