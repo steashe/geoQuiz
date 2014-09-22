@@ -211,10 +211,16 @@ gameController = {
 
     increaseScore: function () {
         /// <summary>increase the users score by one</summary>
-        $('#score').fadeOut(800);
-        this.ScoreSheet.playerScore++;
-        $('#score').html('Score: ' + this.ScoreSheet.playerScore).fadeIn(800);
+        $('#score').animate({
+            color: 'yellow'
+        }, 700);
 
+        this.ScoreSheet.playerScore++;
+        $('#score').html('Score: ' + this.ScoreSheet.playerScore);
+
+        $('#score').animate({
+            color: 'white'
+        }, 500);
     },
 
     loseLife: function () {
@@ -231,7 +237,7 @@ gameController = {
     gameOver: function () {
         /// <summary>player has run out of lives</summary>
         this.reset();
-        $('#country').html('Game Over! ' + this.ScoreSheet.playerScore + ' points.');
+        $('#country').html('That\'s game over! ' + this.ScoreSheet.playerScore + ' points.');
         $('#hint').css('visibility', 'hidden');
         $('#newGame').css('visibility', 'visible');
 
