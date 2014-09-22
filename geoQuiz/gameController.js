@@ -231,7 +231,7 @@ gameController = {
     gameOver: function () {
         /// <summary>player has run out of lives</summary>
         this.reset();
-        $('#country').html('Game Over! You scored ' + this.ScoreSheet.playerScore + ' points.');
+        $('#country').html('Game Over! ' + this.ScoreSheet.playerScore + ' points.');
         $('#hint').css('visibility', 'hidden');
         $('#newGame').css('visibility', 'visible');
 
