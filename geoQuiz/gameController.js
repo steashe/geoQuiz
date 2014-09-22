@@ -5,6 +5,8 @@ gameController = {
         playerLives: 3,
         /// <field name="playerScore" type="Number">Player score</field>
         playerScore: 0,
+        /// <field name="playerHints" type="Number">Player hints</field>
+        playerHints: 3,
     },
 
     Data: {
@@ -23,13 +25,21 @@ gameController = {
         $('#newGame').click(function () {
             gameController.newGame();
         });
+
+        $('#hint').click(function () {
+            gameController.giveHint();
+        });
     },
 
     newGame: function () {
         /// <summary>create a new game</summary>
         this.ScoreSheet.playerLives = 3;
         this.ScoreSheet.playerScore = 0;
+        this.ScoreSheet.playerHints = 3;
 
+        $('#hint').html('3 Hints');
+        $('#hint').removeAttr('disabled');
+        $('#hint').css('visibility', 'visible');
         $('#score').html('Score: 0');
         $('#newGame').css('visibility', 'hidden');
         $('img').css('visibility', 'visible');
@@ -191,9 +201,11 @@ gameController = {
     },
 
     gameOver: function () {
+        /// <summary>player has run out of lives</summary>
         alert('Game Over. You scored ' + this.ScoreSheet.playerScore + ' points.');
         this.reset();
         $('#country').html('Game Over');
+        $('#hint').css('visibility', 'hidden');
         $('#newGame').css('visibility', 'visible');
 
         //empty arrays
@@ -207,5 +219,31 @@ gameController = {
         /// <summary>reset the html in specific IDs</summary>
         $('#country').html('');
         $('#options').html('');
+    },
+
+    giveHint: function () {
+        /// <summary>remove an answer for the user</summary>
+        var remove = Math.random();
+        var wrongAnswers = $('.option').length;
+
+        if (wrongAnswers > 1) {
+            if (remove < 0.5) {
+               $('.option').first().remove();
+            } else {
+                $('.option').last().remove();
+            }
+        } else if (wrongAnswers == 1) {
+            $('.option').remove();
+        } else {
+            return false;
+        }
+
+        this.ScoreSheet.playerHints--;
+        $('#hint').html(this.ScoreSheet.playerHints + ' Hints');
+
+        if (this.ScoreSheet.playerHints === 0) {
+            $('#hint').attr('disabled', 'disabled');
+            $('#hint').html('Out of Hints');
+        }
     }
 };
