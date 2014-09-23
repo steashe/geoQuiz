@@ -144,20 +144,11 @@ gameController = {
 
         //add event handlers to the newly created buttons
         $('.option').click(function () {
-            $(this).css('background-color', 'red');
-            $('#response').html('Incorrect!');
-            setTimeout(function () {
-                gameController.checkUserChoice(false);
-            }, 800);
-                    
+                gameController.checkUserChoice(false);           
         });
 
         $('#answer').click(function () {
-            $(this).css('background-color', '#0F0');
-            $('#response').html('Correct!');
-            setTimeout(function () {
                 gameController.checkUserChoice(true);   
-            }, 800);
         });
 
         
@@ -182,28 +173,22 @@ gameController = {
         /// <param name="correct" type="Boolean">correct boolean</param>
         if (correct) {
             this.increaseScore();
-            setTimeout(function () {
                 gameController.loadNextCountry();
-            }, 800);
             
         } else {
             this.loseLife();
             if (this.checkGameOver()) {
                 this.gameOver();
             }else{
-                setTimeout(function () {
                     gameController.loadNextCountry();
-                }, 800);
             }
         }         
     },
 
     increaseScore: function () {
         /// <summary>increase the users score by one</summary>
-        $('#score').fadeOut(800);
         this.ScoreSheet.playerScore++;
-        $('#score').html('Score: ' + this.ScoreSheet.playerScore).fadeIn(800);
-
+        $('#score').html('Score: ' + this.ScoreSheet.playerScore);
     },
 
     loseLife: function () {
@@ -235,7 +220,6 @@ gameController = {
         /// <summary>reset the html in specific IDs</summary>
         $('#country').html('');
         $('#options').html('');
-        $('#response').html('');
     },
 
     giveHint: function () {
