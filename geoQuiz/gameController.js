@@ -1,250 +1,250 @@
 ﻿/// <reference path="country.js" />
 gameController = {
-    ScoreSheet: {
-        /// <field name="playerLives" type="Number">Player life count</field>
-        playerLives: 3,
-        /// <field name="playerScore" type="Number">Player score</field>
-        playerScore: 0,
-        /// <field name="playerHints" type="Number">Player hints</field>
-        playerHints: 3,
-    },
+	ScoreSheet: {
+		/// <field name="playerLives" type="Number">Player life count</field>
+		playerLives: 3,
+		/// <field name="playerScore" type="Number">Player score</field>
+		playerScore: 0,
+		/// <field name="playerHints" type="Number">Player hints</field>
+		playerHints: 3,
+	},
 
-    Data: {
-        //stores all country objects
-        remainingCountries: [],                           
-        //stores all possible answers
-        allAnswers: [],
-    },
+	Data: {
+		//stores all country objects
+		remainingCountries: [],
+		//stores all possible answers
+		allAnswers: [],
+	},
 
-    init: function () {
-        this.setup();
-    },
+	init: function () {
+		this.setup();
+	},
 
-    setup: function () {
-        //adding event handler
-        $('#newGame').click(function () {
-            gameController.newGame();
-        });
+	setup: function () {
+		//adding event handler
+		$('#newGame').click(function () {
+			gameController.newGame();
+		});
 
-        $('#hint').click(function () {
-            gameController.giveHint();
-        });
-    },
+		$('#hint').click(function () {
+			gameController.giveHint();
+		});
+	},
 
-    newGame: function () {
-        /// <summary>create a new game</summary>
-        this.ScoreSheet.playerLives = 3;
-        this.ScoreSheet.playerScore = 0;
-        this.ScoreSheet.playerHints = 3;
+	newGame: function () {
+		/// <summary>create a new game</summary>
+		this.ScoreSheet.playerLives = 3;
+		this.ScoreSheet.playerScore = 0;
+		this.ScoreSheet.playerHints = 3;
 
-        $('#hint').html('3 Hints');
-        $('#hint').removeAttr('disabled');
-        $('#hint').css('visibility', 'visible');
-        $('#score').html('Score: 0');
-        $('#newGame').css('visibility', 'hidden');
-        $('img').css('visibility', 'visible').fadeIn(100);
-        this.loadData();
-        this.loadNextCountry();
-    },
+		$('#hint').html('3 Hints');
+		$('#hint').removeAttr('disabled');
+		$('#hint').css('visibility', 'visible');
+		$('#score').html('Score: 0');
+		$('#newGame').css('visibility', 'hidden');
+		$('img').css('visibility', 'visible').fadeIn(100);
+		this.loadData();
+		this.loadNextCountry();
+	},
 
-    loadData: function () {
-        /// <summary>load the json data from the file</summary>
-        $.ajax({
-            type: "get",
-            dataType: "text",
-            async: false,
-            url: "countries.json",
+	loadData: function () {
+		/// <summary>load the json data from the file</summary>
+		$.ajax({
+			type: "get",
+			dataType: "text",
+			async: false,
+			url: "countries.json",
 
-            success: function (result) {
-                //creating JavaScript object of the json data
-                var countries = JSON.parse(result).countries;
+			success: function (result) {
+				//creating JavaScript object of the json data
+				var countries = JSON.parse(result).countries;
 
-                for (var x = 0; x < countries.length; x++) {
-                    var name = countries[x].name.common;
-                    var capital = countries[x].capital;
-                    var latitude = countries[x].latlng[0];
-                    var longitude = countries[x].latlng[1];
-                    var region = countries[x].region;
-                    var subRegion = countries[x].subregion;
+				for (var x = 0; x < countries.length; x++) {
+					var name = countries[x].name.common;
+					var capital = countries[x].capital;
+					var latitude = countries[x].latlng[0];
+					var longitude = countries[x].latlng[1];
+					var region = countries[x].region;
+					var subRegion = countries[x].subregion;
 
-                    if (capital != '') {
-                        var nation = new Country(name, capital, latitude, longitude, region, subRegion);
-                        gameController.Data.remainingCountries.push(nation);
-                        gameController.Data.allAnswers.push(capital);
-                    }   
-                }
-            },
+					if (capital != '') {
+						var nation = new Country(name, capital, latitude, longitude, region, subRegion);
+						gameController.Data.remainingCountries.push(nation);
+						gameController.Data.allAnswers.push(capital);
+					}
+				}
+			},
 
-            error: function (e) {
-                alert('Please Refresh');
-                console.log(e.status);
-            }
-        });
-    },
+			error: function (e) {
+				alert('Please Refresh');
+				console.log(e.status);
+			}
+		});
+	},
 
-    loadNextCountry: function () {
-        /// <summary>load the next country</summary>
+	loadNextCountry: function () {
+		/// <summary>load the next country</summary>
 
-        this.reset();
-        //variable for amount of answers
-        var numberOfWrongAnswers = 2;
-        
-        //copy the answers
-        var copyOfAnswers = new Array();
+		this.reset();
+		//variable for amount of answers
+		var numberOfWrongAnswers = 2;
 
-        for (var x = 0; x < this.Data.allAnswers.length; x++){
-            copyOfAnswers.push(this.Data.allAnswers[x]);
-        }
-        
-        //get the answer for the question
-        var answer = Math.floor(Math.random() * (this.Data.remainingCountries.length));
-        var answerName = this.Data.remainingCountries[answer].name;
-        var answerCapital = this.Data.remainingCountries[answer].capital;
+		//copy the answers
+		var copyOfAnswers = new Array();
 
-        //cut the chosen country out
-        this.Data.remainingCountries.splice(answer, 1);
+		for (var x = 0; x < this.Data.allAnswers.length; x++) {
+			copyOfAnswers.push(this.Data.allAnswers[x]);
+		}
 
-        //remove the answer from the copy
-        var c = 0;
-        while (c < copyOfAnswers.length) {
-            if (answerCapital === copyOfAnswers[c]) {
-                copyOfAnswers.splice(c, 1);
-                break;
-            }
-            c++;
-        }
+		//get the answer for the question
+		var answer = Math.floor(Math.random() * (this.Data.remainingCountries.length));
+		var answerName = this.Data.remainingCountries[answer].name;
+		var answerCapital = this.Data.remainingCountries[answer].capital;
 
-        var answerOptions = [];
+		//cut the chosen country out
+		this.Data.remainingCountries.splice(answer, 1);
 
-        var a1 = '<button id = "answer">' + answerCapital + '</button>';
-        answerOptions.push(a1);
+		//remove the answer from the copy
+		var c = 0;
+		while (c < copyOfAnswers.length) {
+			if (answerCapital === copyOfAnswers[c]) {
+				copyOfAnswers.splice(c, 1);
+				break;
+			}
+			c++;
+		}
 
-        //select the amount of wrong answers
-        var d = 0;
-        while (d < numberOfWrongAnswers) {
-            var random = Math.floor(Math.random() * (copyOfAnswers.length));
-            var randomCapital = copyOfAnswers[random];
-            //remove them also so no duplicates
-            copyOfAnswers.splice(random, 1);
-            //add to the array of answers
-            var a = '<button class = "option">' + randomCapital + '</button>'
-            answerOptions.push(a);
-            d++;
-        }
+		var answerOptions = [];
 
-        //shuffle the array of answers
-        this.shuffle(answerOptions);
-        
-        //add data to html
-        $('#country').html(answerName);
+		var a1 = '<button id = "answer" class =  "choice">' + answerCapital + '</button>';
+		answerOptions.push(a1);
 
-        for (var n = 0; n < answerOptions.length ; n++){
-            $('#options').append(answerOptions[n]);
-        }
+		//select the amount of wrong answers
+		var d = 0;
+		while (d < numberOfWrongAnswers) {
+			var random = Math.floor(Math.random() * (copyOfAnswers.length));
+			var randomCapital = copyOfAnswers[random];
+			//remove them also so no duplicates
+			copyOfAnswers.splice(random, 1);
+			//add to the array of answers
+			var a = '<button class = "option choice">' + randomCapital + '</button>'
+			answerOptions.push(a);
+			d++;
+		}
 
-        //add event handlers to the newly created buttons
-        $('.option').click(function () {
-                gameController.checkUserChoice(false);           
-        });
+		//shuffle the array of answers
+		this.shuffle(answerOptions);
 
-        $('#answer').click(function () {
-                gameController.checkUserChoice(true);   
-        });
+		//add data to html
+		$('#country').html(answerName);
 
-        
-    },
+		for (var n = 0; n < answerOptions.length ; n++) {
+			$('#options').append(answerOptions[n]);
+		}
 
-    shuffle: function (array) {
-        /// <summary>shuffle the array of answers</summary>
-        /// <param name="array" type="Array">the array to be shuffled</param>
-        for (var i = array.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
+		//add event handlers to the newly created buttons
+		$('.option').click(function () {
+			gameController.checkUserChoice(false);
+		});
 
-            //make the swap
-            var temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-        }
-        return array;
-    },
+		$('#answer').click(function () {
+			gameController.checkUserChoice(true);
+		});
 
-    checkUserChoice: function (correct) {
-        /// <summary>check the users selected answer</summary>
-        /// <param name="correct" type="Boolean">correct boolean</param>
-        if (correct) {
-            this.increaseScore();
-                gameController.loadNextCountry();
-            
-        } else {
-            this.loseLife();
-            if (this.checkGameOver()) {
-                this.gameOver();
-            }else{
-                    gameController.loadNextCountry();
-            }
-        }         
-    },
 
-    increaseScore: function () {
-        /// <summary>increase the users score by one</summary>
-        this.ScoreSheet.playerScore++;
-        $('#score').html('Score: ' + this.ScoreSheet.playerScore);
-    },
+	},
 
-    loseLife: function () {
-        /// <summary>the player loses a life</summary>
-        $('#life' + this.ScoreSheet.playerLives).fadeOut(800);
-        this.ScoreSheet.playerLives--;  
-    },
+	shuffle: function (array) {
+		/// <summary>shuffle the array of answers</summary>
+		/// <param name="array" type="Array">the array to be shuffled</param>
+		for (var i = array.length - 1; i > 0; i--) {
+			var j = Math.floor(Math.random() * (i + 1));
 
-    checkGameOver: function () {
-        /// <summary>check if the player is out of lives or finished the game</summary>
-        return this.ScoreSheet.playerLives === 0 || this.Data.remainingCountries.length === 0; 
-    },
+			//make the swap
+			var temp = array[i];
+			array[i] = array[j];
+			array[j] = temp;
+		}
+		return array;
+	},
 
-    gameOver: function () {
-        /// <summary>player has run out of lives</summary>
-        this.reset();
-        $('#country').html('Game Over! You scored ' + this.ScoreSheet.playerScore + ' points.');
-        $('#hint').css('visibility', 'hidden');
-        $('#newGame').css('visibility', 'visible');
+	checkUserChoice: function (correct) {
+		/// <summary>check the users selected answer</summary>
+		/// <param name="correct" type="Boolean">correct boolean</param>
+		if (correct) {
+			this.increaseScore();
+			gameController.loadNextCountry();
 
-        //empty arrays
-        this.Data.remainingCountries = [];
-        this.Data.allAnswers = [];
+		} else {
+			this.loseLife();
+			if (this.checkGameOver()) {
+				this.gameOver();
+			} else {
+				gameController.loadNextCountry();
+			}
+		}
+	},
 
-        $('#score').html('');
-    },
+	increaseScore: function () {
+		/// <summary>increase the users score by one</summary>
+		this.ScoreSheet.playerScore++;
+		$('#score').html('Score: ' + this.ScoreSheet.playerScore);
+	},
 
-    reset: function () {
-        /// <summary>reset the html in specific IDs</summary>
-        $('#country').html('');
-        $('#options').html('');
-    },
+	loseLife: function () {
+		/// <summary>the player loses a life</summary>
+		$('#life' + this.ScoreSheet.playerLives).fadeOut(800);
+		this.ScoreSheet.playerLives--;
+	},
 
-    giveHint: function () {
-        /// <summary>remove an answer for the user</summary>
-        var remove = Math.random();
-        var wrongAnswers = $('.option').length;
+	checkGameOver: function () {
+		/// <summary>check if the player is out of lives or finished the game</summary>
+		return this.ScoreSheet.playerLives === 0 || this.Data.remainingCountries.length === 0;
+	},
 
-        if (wrongAnswers > 1) {
-            if (remove < 0.5) {
-               $('.option').first().remove();
-            } else {
-                $('.option').last().remove();
-            }
-        } else if (wrongAnswers == 1) {
-            $('.option').remove();
-        } else {
-            return false;
-        }
+	gameOver: function () {
+		/// <summary>player has run out of lives</summary>
+		this.reset();
+		$('#country').html('Game Over! You scored ' + this.ScoreSheet.playerScore + ' points.');
+		$('#hint').css('visibility', 'hidden');
+		$('#newGame').css('visibility', 'visible');
 
-        this.ScoreSheet.playerHints--;
-        $('#hint').html(this.ScoreSheet.playerHints + ' Hints');
+		//empty arrays
+		this.Data.remainingCountries = [];
+		this.Data.allAnswers = [];
 
-        if (this.ScoreSheet.playerHints === 0) {
-            $('#hint').attr('disabled', 'disabled');
-            $('#hint').html('Out of Hints');
-        }
-    }
+		$('#score').html('');
+	},
+
+	reset: function () {
+		/// <summary>reset the html in specific IDs</summary>
+		$('#country').html('');
+		$('#options').html('');
+	},
+
+	giveHint: function () {
+		/// <summary>remove an answer for the user</summary>
+		var remove = Math.random();
+		var wrongAnswers = $('.option').length;
+
+		if (wrongAnswers > 1) {
+			if (remove < 0.5) {
+				$('.option').first().remove();
+			} else {
+				$('.option').last().remove();
+			}
+		} else if (wrongAnswers == 1) {
+			$('.option').remove();
+		} else {
+			return false;
+		}
+
+		this.ScoreSheet.playerHints--;
+		$('#hint').html(this.ScoreSheet.playerHints + ' Hints');
+
+		if (this.ScoreSheet.playerHints === 0) {
+			$('#hint').attr('disabled', 'disabled');
+			$('#hint').html('Out of Hints');
+		}
+	}
 };
