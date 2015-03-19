@@ -3,27 +3,37 @@
 <head>
 	<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1" />
 
-    <title>geoQuiz</title>
-    <link type="text/css" rel="stylesheet" href="style.css" />
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script type="text/javascript" src="Country.js"></script>
-    <script type="text/javascript" src="general.js"></script>
-    <script type="text/javascript" src="gameController.js"></script>
+	<title>geoQuiz</title>
+	<link type="text/css" rel="stylesheet" href="style.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="Country.js"></script>
+	<script type="text/javascript" src="general.js"></script>
+	<script type="text/javascript" src="gameController.js"></script>
+	<script type="text/javascript" src="endGameController.js"></script>
 </head>
 <body>
-    <div id="container">
-        <img class="visibile heart" id="life1" src="life.png" alt="heart" />
-        <img class="visibile heart" id="life2" src="life.png" alt="heart" />
-        <img class="visibile heart" id="life3" src="life.png" alt="heart" />
+	<div id="container" class="view">
+		<img class="visibile heart" id="life1" src="life.png" alt="heart" />
+		<img class="visibile heart" id="life2" src="life.png" alt="heart" />
+		<img class="visibile heart" id="life3" src="life.png" alt="heart" />
 
-        <button id="newGame">Capital Cities</button>
-        
-        <div id="country"></div>
+		<button id="newGame" class="bigBlue">Capital Cities</button>
 
-        <div id="options"></div>
-        
-        <button id="hint">3 Hints</button>
-        <p id="score"></p> 
-    </div> 
+		<div class="text"></div>
+
+		<div id="options"></div>
+
+		<button id="hint">3 Hints</button>
+		<p id="score"></p>
+	</div>
+	<div id="endGame" class="view">
+		<div class="text"></div>
+		<input type="text" placeholder="Your Name" class="name" />
+
+		<button id="submitScore" class="bigBlue">Submit my score</button>
+
+		<button id="home" class="bigBlue">Home</button>
+	</div>
+
 </body>
 </html>

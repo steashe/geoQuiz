@@ -84,9 +84,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Country.js" />
+    <Content Include="endGameController.js" />
     <Content Include="gameController.js" />
     <Content Include="general.js" />
     <Content Include="home.html" />
+    <Content Include="newHome.aspx" />
     <Content Include="style.css" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -109,6 +111,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="newHome.aspx.designer.vb">
+      <DependentUpon>newHome.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="newHome.aspx.vb">
+      <DependentUpon>newHome.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>

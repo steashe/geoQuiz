@@ -1,5 +1,18 @@
 ﻿/// <reference path="country.js" />
+/// <reference path="endGameController.js" />
+
 gameController = {
+
+	ui: {
+		view: '#container',
+		newGame: '#newGame',
+		country: '#container .text',
+		score: '#score',
+		hintBtn: '#hint'
+	},
+
+	hasInit: false,
+
 	ScoreSheet: {
 		/// <field name="playerLives" type="Number">Player life count</field>
 		playerLives: 3,
@@ -17,17 +30,33 @@ gameController = {
 	},
 
 	init: function () {
-		this.setup();
+		gameController.setupHandlers();
+		gameController.hasInit = true;
 	},
 
-	setup: function () {
+	load: function(){
+		if (!gameController.hasInit) gameController.init();
+		$(gameController.ui.view).show();
+		$(gameController.ui.newGame).show();
+	},
+
+	setupHandlers: function () {
 		//adding event handler
-		$('#newGame').click(function () {
+		$(gameController.ui.newGame).click(function () {
 			gameController.newGame();
 		});
 
-		$('#hint').click(function () {
+		$(gameController.ui.hintBtn).click(function () {
 			gameController.giveHint();
+		});
+
+		//adding click handlers to things not yet created
+		$(document).on('click', '.option', function () {
+			gameController.checkUserChoice(false);
+		});
+
+		$(document).on('click', '#answer', function () {
+			gameController.checkUserChoice(true);
 		});
 	},
 
@@ -37,12 +66,13 @@ gameController = {
 		this.ScoreSheet.playerScore = 0;
 		this.ScoreSheet.playerHints = 3;
 
-		$('#hint').html('3 Hints');
-		$('#hint').removeAttr('disabled');
-		$('#hint').css('visibility', 'visible');
-		$('#score').html('Score: 0');
-		$('#newGame').css('visibility', 'hidden');
-		$('img').css('visibility', 'visible').fadeIn(100);
+		$(gameController.ui.country).show();
+		$(gameController.ui.hintBtn).html('3 Hints');
+		$(gameController.ui.hintBtn).removeAttr('disabled');
+		$(gameController.ui.hintBtn).show();
+		$(gameController.ui.score).html('Score: 0');
+		$(gameController.ui.newGame).hide()
+		$('img').show().fadeIn(100);
 		this.loadData();
 		this.loadNextCountry();
 	},
@@ -136,22 +166,11 @@ gameController = {
 		this.shuffle(answerOptions);
 
 		//add data to html
-		$('#country').html(answerName);
+		$(gameController.ui.country).html(answerName);
 
 		for (var n = 0; n < answerOptions.length ; n++) {
 			$('#options').append(answerOptions[n]);
 		}
-
-		//add event handlers to the newly created buttons
-		$('.option').click(function () {
-			gameController.checkUserChoice(false);
-		});
-
-		$('#answer').click(function () {
-			gameController.checkUserChoice(true);
-		});
-
-
 	},
 
 	shuffle: function (array) {
@@ -188,7 +207,7 @@ gameController = {
 	increaseScore: function () {
 		/// <summary>increase the users score by one</summary>
 		this.ScoreSheet.playerScore++;
-		$('#score').html('Score: ' + this.ScoreSheet.playerScore);
+		$(gameController.ui.score).html('Score: ' + this.ScoreSheet.playerScore);
 	},
 
 	loseLife: function () {
@@ -205,20 +224,20 @@ gameController = {
 	gameOver: function () {
 		/// <summary>player has run out of lives</summary>
 		this.reset();
-		$('#country').html('Game Over! You scored ' + this.ScoreSheet.playerScore + ' points.');
-		$('#hint').css('visibility', 'hidden');
-		$('#newGame').css('visibility', 'visible');
+		$(gameController.ui.hintBtn).hide();
+		$(gameController.ui.view).hide();
+		endGameController.load();
 
 		//empty arrays
 		this.Data.remainingCountries = [];
 		this.Data.allAnswers = [];
 
-		$('#score').html('');
+		$(gameController.ui.score).html('');
 	},
 
 	reset: function () {
 		/// <summary>reset the html in specific IDs</summary>
-		$('#country').html('');
+		$(gameController.ui.country).html('');
 		$('#options').html('');
 	},
 
@@ -240,11 +259,11 @@ gameController = {
 		}
 
 		this.ScoreSheet.playerHints--;
-		$('#hint').html(this.ScoreSheet.playerHints + ' Hints');
+		$(gameController.ui.hintBtn).html(this.ScoreSheet.playerHints + ' Hints');
 
 		if (this.ScoreSheet.playerHints === 0) {
-			$('#hint').attr('disabled', 'disabled');
-			$('#hint').html('Out of Hints');
+			$(gameController.ui.hintBtn).attr('disabled', 'disabled');
+			$(gameController.ui.hintBtn).html('Out of Hints');
 		}
 	}
 };
